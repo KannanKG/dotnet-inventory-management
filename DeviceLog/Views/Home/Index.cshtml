@@ -1,0 +1,32 @@
+﻿@model string[];
+@{
+    ViewData["Title"] = "Status Update";
+}
+<h4 class="mb-3">Select your Team: </h4>
+<form method="get" asp-controller="DeviceStatus" asp-action="Index">
+    <div class="form-group">
+        <div class="input-group mb-3">
+            <select class="custom-select" id="Team" onclick="TeamSelect()">
+                <option selected>Select your team</option>
+                @foreach (var id in Model)
+                {
+                    <option value="@id">@id</option>
+                }
+            </select>
+        </div>
+    </div>
+    <input type="hidden" name="team" id="teamSubmit" value="" />
+    <button type="submit" class="btn btn-primary" id="submitBtn" onclick="onSubmit()" disabled>Submit</button>
+</form>
+<script type="text/javascript">
+    function TeamSelect() {
+        if (document.getElementById('Team').selectedIndex !== 0) {
+            document.getElementById("submitBtn").removeAttribute("disabled");
+        } else {
+            document.getElementById("submitBtn").setAttribute("disabled", "true");
+        }
+    }
+    function onSubmit() {
+        document.getElementById("teamSubmit").value = document.getElementById('Team').selectedOptions[0].value;        
+    }
+</script>

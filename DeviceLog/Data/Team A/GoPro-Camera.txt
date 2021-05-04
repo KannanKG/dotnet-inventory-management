@@ -1,0 +1,1 @@
+{"DeviceName":"GoPro-Camera","SerialNumber":null,"LastUpdatedDate":"6/29/2020 12:40:49 AM","DeviceOwner":"kannanganesan","Status":"onhold","OwnerTeam":"Team A","LoanStatus":"false","LoanedTeam":""}

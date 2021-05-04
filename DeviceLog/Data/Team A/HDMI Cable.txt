@@ -1,0 +1,1 @@
+{"DeviceName":"HDMI Cable","SerialNumber":null,"LastUpdatedDate":"6/29/2020 12:34:14 AM","DeviceOwner":"kannanganesan","Status":"","OwnerTeam":"Team A","LoanStatus":"","LoanedTeam":""}

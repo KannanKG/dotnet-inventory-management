@@ -1,0 +1,28 @@
+﻿@model List<Inventory.Models.TeamAdminList>;
+@{
+    ViewData["Title"] = "Access Admin";
+}
+
+<a class="btn btn-outline-success mb-3" asp-controller="Access" asp-action="Add">New Assignee</a>
+<div class="card" style="height: 70vh; width: 100%; overflow-x: auto;">
+    <div class="card-header">
+        Team Admin List
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <tr>
+                <th>Team Name</th>
+                <th>Team Admin</th>
+                <th>Delete Owner</th>
+            </tr>
+            @foreach (var admin in Model)
+            {
+                <tr>
+                    <td>@admin.Team</td>
+                    <td>@admin.Admin</td>
+                    <td><a class="btn btn-danger btn-sm" asp-controller="Access" asp-action="Remove" asp-route-teamName="@admin.Team" asp-route-teamAdmin="@admin.Admin">Delete</a></td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

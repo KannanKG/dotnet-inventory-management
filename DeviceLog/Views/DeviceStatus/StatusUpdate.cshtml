@@ -1,0 +1,44 @@
+﻿@model Inventory.Models.DeviceStatusUpdate;
+@{
+    ViewData["Title"] = "Device Status";
+}
+@if (string.IsNullOrEmpty(Model.Error))
+{
+    <div class="alert alert-success">
+        Status has been updated successfully
+    </div>
+    <h4 class="mb-3">New Status</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Device Name</th>
+                <th scope="col">Serial #</th>
+                <th scope="col">Last Updated Date</th>
+                <th scope="col">Device Owner</th>
+                <th scope="col">Owner Team</th>
+                <th scope="col">Status</th>
+                <th scope="col">Loan Status</th>
+                <th scope="col">Loaned Team</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@Model.Device.DeviceName</td>
+                <td>@Model.Device.SerialNumber</td>
+                <td>@Model.Device.LastUpdatedDate</td>
+                <td>@Model.Device.DeviceOwner</td>
+                <td>@Model.Device.OwnerTeam</td>
+                <td>@Model.Device.Status</td>
+                <td>@Model.Device.LoanStatus</td>
+                <td>@Model.Device.LoanedTeam</td>
+            </tr>
+        </tbody>
+    </table>
+    <a class="btn btn-secondary" asp-controller="DeviceStatus" asp-action="Index" asp-route-team="@Model.Device.OwnerTeam">Go back to your Team devices list</a>
+}
+else
+{
+    <div class="alert alert-danger">
+        @Model.Error
+    </div>
+}

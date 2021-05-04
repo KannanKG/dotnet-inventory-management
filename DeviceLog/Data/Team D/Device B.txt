@@ -1,0 +1,1 @@
+{"DeviceName":"Device B","SerialNumber":"1234567891","LastUpdatedDate":"6/29/2020 12:42:12 AM","DeviceOwner":"kannanganesan","Status":"","OwnerTeam":"Team D","LoanStatus":"","LoanedTeam":""}

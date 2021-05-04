@@ -1,0 +1,62 @@
+﻿@model string[];
+@{
+    ViewData["Title"] = "Status Update";
+}
+    <div class="form-group col-md-12">
+        <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="switchMode" onclick="switchMode(this)">
+            <label class="custom-control-label" for="switchMode" id="label">Turn on to remove a team</label>
+        </div>
+    </div>
+    <div id="AddTeam">
+        <h4 class="mb-3">Add a New Team: </h4>
+        <form method="get" asp-controller="Teams" asp-action="Add">
+            <div class="form-group" style="display: block">
+                <label for="TeamName">Team Name:</label>
+                <input type="text" class="form-control" name="teamName" id="TeamName" aria-describedby="addHelp" placeholder="New Team name" onkeyup="enteredText()">
+                <small id="addHelp" class="form-text text-muted">Team name must be unique and should not be added already to the list</small>
+            </div>
+            <button type="submit" class="btn btn-primary" id="addBtn" disabled>Add</button>
+        </form>
+    </div>
+    <div id="RemoveTeam" style="display: none">
+        <h4 class="mb-3">Delete a Team: </h4>
+        <form method="get" asp-controller="Teams" asp-action="Remove">
+            <div class="form-group">
+                <div class="input-group mb-3">
+                    <select class="custom-select" id="Team" name="team" onclick="TeamSelect()" size="8">
+                        @foreach (var id in Model)
+                        {
+                            <option value="@id">@id</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" id="submitBtn" onclick="onSubmit()" disabled>Delete</button>
+        </form>
+    </div>
+    <script type="text/javascript">
+        function enteredText() {
+            document.getElementById("addBtn").removeAttribute("disabled");
+            if (document.getElementById("TeamName").value === 0) {
+                document.getElementById("addBtn").setAttribute("disabled", "true");
+            }
+        }
+        function switchMode(switched) {
+            if (switched.checked) {
+                document.getElementById("RemoveTeam").style.display = "block";
+                document.getElementById("AddTeam").style.display = "none";
+                document.getElementById("label").innerText = "Turn off to add a team";
+                window.alert("Pay some attention here, deleting a team name will remove a team and its devices permanently");
+            } else {
+                document.getElementById("AddTeam").style.display = "block";
+                document.getElementById("RemoveTeam").style.display = "none";
+                document.getElementById("label").innerText = "Turn on to remove a team";
+            }
+        }
+        function TeamSelect() {
+            if (document.getElementById("Team").selectedIndex) {
+                document.getElementById("submitBtn").removeAttribute("disabled");
+            }
+        }
+    </script>

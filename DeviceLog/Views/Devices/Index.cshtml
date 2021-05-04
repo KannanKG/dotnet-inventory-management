@@ -1,0 +1,45 @@
+﻿@model List<Inventory.Models.DeviceDetails>;
+@{
+    ViewData["Title"] = "Team Devices";
+}
+<div class="mb-3">
+    <a class="btn btn-primary btn-sm" asp-controller="Devices" asp-action="Add">Add New Device to your team list</a>
+</div>
+<div class="card" style="height: 70vh; width: 100%; overflow-x: auto;">
+    <div class="card-header">
+        My Team Devices & Accessories
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Device Name</th>
+                    <th>Serial #</th>
+                    <th>Last Updated Date</th>
+                    <th>Device Owner</th>
+                    <th>Owner Team</th>
+                    <th>Status</th>
+                    <th>Loan Status</th>
+                    <th>Loaned Team</th>
+                    <th>Delete the device</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var device in Model)
+                {
+                    <tr>
+                        <td>@device.DeviceName</td>
+                        <td>@device.SerialNumber</td>
+                        <td>@device.LastUpdatedDate</td>
+                        <td>@device.DeviceOwner</td>
+                        <td>@device.OwnerTeam</td>
+                        <td>@device.Status</td>
+                        <td>@device.LoanStatus</td>
+                        <td>@device.LoanedTeam</td>
+                        <td><a class="btn btn-danger btn-sm" asp-controller="Devices" asp-action="Remove" asp-route-teamName="@device.OwnerTeam" asp-route-deviceName="@device.DeviceName">Delete</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

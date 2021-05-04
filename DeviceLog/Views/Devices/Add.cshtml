@@ -1,0 +1,34 @@
+﻿@model Inventory.Models.DeviceStatusUpdate;
+@{
+    ViewData["Title"] = "Add new device";
+}
+<h4>Add new Device</h4>
+<form method="get" asp-controller="Devices" asp-action="Add">
+    <div class="form-group">
+        <label for="Team">Select Team</label>
+        <select class="custom-select" id="Team" name="teamName" required>
+            @foreach (var Team in Model.Teams)
+            {
+                <option value="@Team">@Team</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="deviceName">Device/ Accessory Name</label>
+        <input type="text" class="form-control" id="deviceName" name="deviceName" placeholder="Device/ Accessory Name" required>
+    </div>
+    <div class="form-group">
+        <label for="serialNumber">Device Serial Number</label>
+        <input type="text" class="form-control" id="serialNumber" name="serialNumber" placeholder="Serial Number">
+    </div>
+    <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
+</form>
+
+@if (!string.IsNullOrEmpty(Model.Error))
+{
+    <div class="alert alert-danger mt-3">@Model.Error</div>
+}
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div class="alert alert-success mt-3">@Model.Message</div>
+}

@@ -1,0 +1,144 @@
+﻿@model Inventory.Models.DeviceStatusUpdate;
+@{
+    ViewData["Title"] = "Device Status Update";
+}
+@if (!string.IsNullOrEmpty(Model.Error))
+{
+    <div class="alert alert-danger">@Model.Error</div>
+}
+else
+{
+    <form asp-controller="DeviceStatus" asp-action="Index" method="get">
+        <h4 class="mb-3">Device Status update</h4>
+        <div class="alert alert-info">
+            <h5 class="alert-heading">Steps to update device status:</h5>
+            <ol>
+                <li>Lookup for device Serial number to know the current status</li>
+                <li>Actions will be suggested considering your login and current status of the device</li>
+            </ol>
+        </div>
+        <div class="form-group">
+            <div class="input-group mb-3">
+                <select class="custom-select" id="Device">
+                    <option selected>Select Device Name</option>
+                    @foreach (var id in Model.Devices)
+                    {
+                        <option value="@id">@id</option>
+                    }
+                </select>
+                <input type="hidden" name="team" id="teamSubmit" value="@Model.TeamName" />
+                <input type="hidden" name="serialNumber" id="serialNumber" value="" />
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit" onclick="onSubmit()">Check status</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    @if (Model.Device != null)
+    {
+        <div style="overflow-x: auto">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Device Name</th>
+                        <th scope="col">Serial #</th>
+                        <th scope="col">Last Updated Date</th>
+                        <th scope="col">Device Owner</th>
+                        <th scope="col">Owner Team</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Loan Status</th>
+                        <th scope="col">Loaned Team</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Model.Device.DeviceName</td>
+                        <td>@Model.Device.SerialNumber</td>
+                        <td>@Model.Device.LastUpdatedDate</td>
+                        <td>@Model.Device.DeviceOwner</td>
+                        <td>@Model.Device.OwnerTeam</td>
+                        <td>@Model.Device.Status</td>
+                        <td>@Model.Device.LoanStatus</td>
+                        <td>@Model.Device.LoanedTeam</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <hr />
+        @if (@User.Identity.Name.Split('\\')[1] == @Model.Device.DeviceOwner)
+        {
+            <form asp-controller="DeviceStatus" asp-action="StatusUpdate" method="get">
+                <h4 class="mb-3">Change Status?</h4>
+                <div class="form-group">
+                    New Status:
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="status" id="taken" value="taken" required>
+                        <label class="form-check-label" for="taken">Taken</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="status" id="onhold" value="onhold">
+                        <label class="form-check-label" for="onhold">On Hold</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="status" id="return" value="return">
+                        <label class="form-check-label" for="return">Return</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="loan" onclick="Loaned()" checked="@Model.Device.LoanStatus">
+                        <label class="form-check-label" for="loan">
+                            Loaned Device?
+                        </label>
+                    </div>
+                </div>
+                <div class="form-row mb-3" id="teamfield" style="display: none;">
+                    <input class="form-control" type="text" name="loanedTeam" id="loanedTeam" value="@Model.Device.LoanedTeam" />
+                </div>
+                <input type="hidden" name="deviceName" value="@Model.Device.DeviceName" />
+                <input type="hidden" name="serialNumber" value="@Model.Device.SerialNumber" />
+                <input type="hidden" name="lastUpdatedDate" value="@DateTime.Now.ToString()" />
+                <input type="hidden" name="deviceOwner" value="@User.Identity.Name.Split('\\')[1]" />
+                <input type="hidden" name="ownerTeam" value="@Model.Device.OwnerTeam" />
+                <input type="hidden" name="loanStatus" id="loanStatus" value="" />
+                <button type="submit" class="btn btn-primary" onclick="onSubmit()">Submit</button>
+            </form>
+        }
+        else
+        {
+            <div class="alert alert-danger">This device is owned by @Model.Device.DeviceOwner, only device owner can make modification to the status.</div>
+        }
+    }
+    <script type="text/javascript">
+        function Loaned() {
+            document.getElementById("loanStatus").value = document.getElementById("loan").checked.toString();
+            if (document.getElementById("loan").checked) {
+                document.getElementById("teamfield").style.display = "block";
+                document.getElementById("loanedTeam").setAttribute("required", "true");
+            } else {
+                document.getElementById("teamfield").style.display = "none";
+                document.getElementById("loanedTeam").setAttribute("required", "false");
+            }
+        }
+        function onSubmit() {
+            document.getElementById("serialNumber").value = document.getElementById('Device').selectedOptions[0].value;
+        }
+    window.onload = function () {
+            if ("@Model.Device?.LoanStatus" !== "true" || "@Model.Device?.LoanStatus" === "") {
+            document.getElementById('loan').checked = false;
+        } else {
+            document.getElementById('loan').checked = true;
+            document.getElementById("teamfield").style.display = "block";
+        }
+        if ("@Model.Device?.Status") {
+            var statusList = document.getElementsByName("status");
+            for (var i = 0; i < statusList.length; i++) {
+                if (statusList[i].value === "@Model.Device?.Status.ToLower()") {
+                    statusList[i].checked = true;
+                    }
+                }
+        }
+        }
+    </script>
+
+}

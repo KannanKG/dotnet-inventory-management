@@ -1,0 +1,65 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Inventory</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <svg style="width:18px; height: 18px; margin-right: 5px;" viewBox="0 0 448 512"><path fill="currentColor" d="M400 0H48C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zM224 480c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm176-108c0 6.6-5.4 12-12 12H60c-6.6 0-12-5.4-12-12V60c0-6.6 5.4-12 12-12h328c6.6 0 12 5.4 12 12v312z"></path></svg><a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"> Inventory</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav flex-grow-1">
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "teamAdmin")).Succeeded)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Devices" asp-action="Index">Device Admin</a>
+                            </li>
+                        }
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "superAdmin")).Succeeded)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Admin
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="nav-link text-dark" asp-controller="Access" asp-action="Index">Amin Mgmt</a>
+                                    <a class="nav-link text-dark" asp-controller="Teams" asp-action="Index">Team Mgmt</a>
+                                    <a class="nav-link text-dark" asp-controller="Asset" asp-action="Index">Asset Mgmt</a>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <button class="btn btn-secondary btn-sm">Hello, @User.Identity.Name.Split('\\')[1]</button>
+            </div>
+        </nav>
+    </header>
+    <div class="container-fluid">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    @*<footer class="border-top footer text-muted">
+            <div class="container-fluid">
+                &copy; 2020 - Inventory
+            </div>
+        </footer>*@
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
